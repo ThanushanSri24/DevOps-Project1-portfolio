@@ -1,12 +1,12 @@
-name: DevOps CI Pipeline
-#Triger the workflow on push to main branch
+name: Full CI/CD Pipeline (Docker Simulation)
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  build:
+  build-test-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,11 +18,24 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Flask Import Test
+      - name: Run Basic App Test
         run: |
-          python -c "import app; print('App imported successfully')"
+          python -c "import app; print('App imports successfully')"
+
+      - name: Build Docker Image
+        run: |
+          docker build -t devops-app .
+
+      - name: Run Docker Container (CD Simulation)
+        run: |
+          docker run -d -p 5000:5000 --name test-app devops-app
+          sleep 5
+          docker ps
+
+      - name: Check Container Logs
+        run: |
+          docker logs test-app

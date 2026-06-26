@@ -9,4 +9,4 @@ def home():
     return render_template("index.html")
 #debug = true allows the application to automatically reload when code changes are detected and provides detailed error messages in the browser. This is useful during development but should be turned off in production for security reasons.
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
